@@ -31,6 +31,7 @@ const Landing = () => {
   ];
 
   const handleGetStarted = () => {
+    // Start the profile setup at the beginning (Resume Upload)
     router.push('/profile-setup');
   };
 

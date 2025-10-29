@@ -19,7 +19,7 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
         degree: profile.degree || "Bachelor of Computer Science",
         university: profile.university || "National University of Singapore",
         year: profile.year || "Final Year",
-        gpa: profile.gpa || "3.8/4.0"
+        gpa: profile.gpa || "3.3/4.0"
       },
       skills: profile.skills || ["JavaScript", "Python", "React", "Node.js"],
       experience: [
@@ -94,7 +94,7 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                     <FiFileText size={32} />
                     <div>
                       <h2 className="text-2xl font-bold">Auto-Generated Resume</h2>
-                      <p className="text-sm opacity-90">
+                      <p className="text-sm text-white/90">
                         {job ? `Tailored for ${job.company} - ${job.role}` : 'General Resume'}
                       </p>
                     </div>
@@ -116,28 +116,28 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
                       {resume.personalInfo.name}
                     </h1>
-                    <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-4">
+                    <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-700 dark:text-gray-300 mt-4">
                       <div className="flex items-center space-x-1">
                         <FiMail size={16} />
-                        <span>{resume.personalInfo.email}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.email}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <FiPhone size={16} />
-                        <span>{resume.personalInfo.phone}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.phone}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <FiMapPin size={16} />
-                        <span>{resume.personalInfo.location}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.location}</span>
                       </div>
                     </div>
                     <div className="flex justify-center gap-4 text-sm text-blue-600 dark:text-blue-400 mt-3">
                       <div className="flex items-center space-x-1">
                         <FiGithub size={16} />
-                        <span>{resume.personalInfo.github}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.github}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <FiLinkedin size={16} />
-                        <span>{resume.personalInfo.linkedin}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.linkedin}</span>
                       </div>
                     </div>
                   </div>
@@ -152,12 +152,12 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                         <h4 className="font-semibold text-gray-900 dark:text-white">
                           {resume.education.university}
                         </h4>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
                           {resume.education.year}
                         </span>
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">{resume.education.degree}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">GPA: {resume.education.gpa}</p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">GPA: {resume.education.gpa}</p>
                     </div>
                   </div>
 
@@ -195,11 +195,11 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                                 {exp.company || exp.event}
                               </p>
                             </div>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="text-sm text-gray-700 dark:text-gray-300">
                               {exp.period}
                             </span>
                           </div>
-                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400 ml-2">
+                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 ml-2">
                             {exp.description.map((item, i) => (
                               <li key={i}>{item}</li>
                             ))}
@@ -221,11 +221,11 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                             <h4 className="font-semibold text-gray-900 dark:text-white">
                               {project.name}
                             </h4>
-                            <span className="text-sm text-gray-600 dark:text-gray-400 italic">
+                            <span className="text-sm text-gray-700 dark:text-gray-300 italic">
                               {project.tech}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                          <p className="text-sm text-gray-700 dark:text-gray-300">
                             {project.description}
                           </p>
                         </div>

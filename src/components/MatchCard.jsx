@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { FiX, FiCheck, FiTrendingUp, FiMapPin, FiClock, FiDollarSign, FiBarChart2, FiList, FiSettings } from 'react-icons/fi';
+import { FiX, FiCheck, FiTrendingUp, FiMapPin, FiClock, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 import SkillVisualizer from '@/components/SkillVisualizer';
 
 const MatchCard = ({
   job,
   onSwipeLeft,
-  onSwipeRight,
+  // onRequestApply -> request a candidate-initiated apply flow (show modal in parent)
+  onRequestApply,
   showControls = true,
   profileSkills = [],
   processedCount = 0,
@@ -22,14 +23,18 @@ const MatchCard = ({
 
   const handleDragEnd = (event, info) => {
     if (Math.abs(info.offset.x) > 100) {
-      setExitX(info.offset.x > 0 ? 300 : -300);
-      setTimeout(() => {
-        if (info.offset.x > 0) {
-          onSwipeRight(job);
-        } else {
-          onSwipeLeft(job);
+      // If user dragged right: request apply (show modal) but don't auto-remove the card here.
+      if (info.offset.x > 0) {
+        if (typeof onRequestApply === 'function') {
+          onRequestApply(job);
         }
-      }, 200);
+      } else {
+        // left: keep previous behavior and animate away
+        setExitX(-300);
+        setTimeout(() => {
+          onSwipeLeft(job);
+        }, 200);
+      }
     }
   };
 
@@ -61,16 +66,16 @@ const MatchCard = ({
         {/* Header with Logo and Match Score */}
         <div className={`bg-gradient-to-r ${getMatchGradient(job.matchScore)} p-6 text-white relative flex-shrink-0`}>
           <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4">
               <div className="text-5xl">{job.logo}</div>
               <div>
                 <h2 className="text-2xl font-bold">{job.company}</h2>
-                <p className="text-sm opacity-90">{job.role}</p>
+                <p className="text-sm text-white">{job.role}</p>
               </div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold">{job.matchScore}%</div>
-              <div className="text-xs opacity-90">Match</div>
+              <div className="text-xs text-white">Match</div>
             </div>
           </div>
         </div>
@@ -101,7 +106,7 @@ const MatchCard = ({
           {/* Description */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Job Description</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               {job.description}
             </p>
           </div>
@@ -150,22 +155,7 @@ const MatchCard = ({
               <span>{showSkillGap ? 'Hide' : 'Show'} Skill Analysis</span>
             </button>
 
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={onNavigateApplications}
-                className="w-full px-4 py-3 rounded-lg font-semibold bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition-all flex items-center justify-center space-x-2"
-              >
-                <FiList />
-                <span>Applications</span>
-              </button>
-              <button
-                onClick={onNavigateRecalibrate}
-                className="w-full px-4 py-3 rounded-lg font-semibold bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition-all flex items-center justify-center space-x-2"
-              >
-                <FiSettings />
-                <span>Recalibrate</span>
-              </button>
-            </div>
+            {/* Recalibrate button removed from card (use bottom nav Profile to recalibrate) */}
           </div>
 
           {/* Skill Gap Visualizer (inside the card) */}
@@ -213,7 +203,9 @@ const MatchCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => onSwipeRight(job)}
+                onClick={() => {
+                  if (typeof onRequestApply === 'function') onRequestApply(job);
+                }}
               className="w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
             >
               <FiCheck size={32} />

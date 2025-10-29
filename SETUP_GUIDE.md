@@ -21,7 +21,7 @@ The development server is running at:
    - Degree: Bachelor of Computer Science
    - University: National University of Singapore
    - Year: Final Year
-   - GPA: 3.8/4.0
+   - GPA: 3.3/4.0
    - GitHub: (optional)
 4. **Step 3**: Select skills (choose at least 5):
    - Recommended: JavaScript, Python, Java, React, Node.js, SQL, Git

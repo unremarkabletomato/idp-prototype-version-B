@@ -29,9 +29,10 @@ export const useStore = create((set, get) => ({
     const { profile } = get();
     const { completionStatus } = profile;
     return completionStatus.resume && 
-           completionStatus.basicInfo && 
-           completionStatus.skills && 
-           completionStatus.quiz;
+      completionStatus.basicInfo && 
+      completionStatus.skills && 
+      completionStatus.interests && 
+      completionStatus.quiz;
   },
 
   // Jobs
@@ -85,6 +86,18 @@ export const useStore = create((set, get) => ({
       skippedJobs: [...state.skippedJobs, job],
       currentJobIndex: state.currentJobIndex + 1
     }));
+  },
+
+  // Undo last skip and return the job that was un-skipped (or null if none)
+  undoSkip: () => {
+    const { skippedJobs, currentJobIndex } = get();
+    if (!skippedJobs || skippedJobs.length === 0) return null;
+    const last = skippedJobs[skippedJobs.length - 1];
+    set((state) => ({
+      skippedJobs: state.skippedJobs.slice(0, -1),
+      currentJobIndex: Math.max(0, currentJobIndex - 1)
+    }));
+    return last;
   },
 
   // Update application status (for mock status changes)

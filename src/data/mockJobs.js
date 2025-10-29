@@ -111,6 +111,21 @@ export const mockJobs = [
     type: "Internship",
     logo: "📱"
   }
+  ,
+  {
+    id: 9,
+    company: "Apples Inc.",
+    role: "Full-Stack Developer Intern",
+    duration: "4 Months",
+    salary: "SGD$1,700 - $1,900 /month",
+    matchScore: 73,
+    description: "A regional e-commerce platform aiming to expand its online retail services. Work with cross-functional teams to deliver end-to-end web application features.",
+    reason: "While this role emphasises front-end development and collaboration across teams, it remains relevant to your full-stack capabilities and interest in technology and design trends. The position offers hands-on experience with user-facing web applications and e-commerce solutions, helping to broaden your skill set, even if it does not fully leverage your backend expertise or hackathon experience. The lower match score reflects these partial overlaps in tech interests and project experiences, but the role still supports career growth and portfolio development.",
+    requiredSkills: ["React", "Node.js", "JavaScript", "CSS", "E-commerce"],
+    location: "Singapore",
+    type: "Internship",
+    logo: "🍎"
+  }
 ];
 
 // Poor match jobs for incomplete profile scenario

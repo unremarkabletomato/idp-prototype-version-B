@@ -3,48 +3,71 @@ import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Responsi
 import { FiTrendingUp, FiBook } from 'react-icons/fi';
 
 const SkillVisualizer = ({ job, userSkills }) => {
-  // Generate mock data for demonstration
+  // Use actual job requirements and provided user skills (no random data)
   const requiredSkills = job?.requiredSkills || ['React', 'Node.js', 'Python', 'SQL', 'Docker'];
-  const mockUserSkills = userSkills?.length > 0 ? userSkills : ['React', 'JavaScript', 'HTML/CSS', 'Git'];
-  
-  // Calculate skill gaps with mock data
-  const gaps = requiredSkills.filter(
-    skill => !mockUserSkills.some(
-      userSkill => userSkill.toLowerCase() === skill.toLowerCase()
-    )
-  );
-  
-  const matched = requiredSkills.filter(
-    skill => mockUserSkills.some(
-      userSkill => userSkill.toLowerCase() === skill.toLowerCase()
-    )
+  const actualUserSkills = Array.isArray(userSkills) ? userSkills : [];
+
+  // Calculate skill gaps and matches deterministically from the provided profile
+  const gaps = requiredSkills.filter(skill =>
+    !actualUserSkills.some(userSkill => userSkill.toLowerCase() === skill.toLowerCase())
   );
 
-  // Prepare bar chart data with mock proficiency levels
+  const matched = requiredSkills.filter(skill =>
+    actualUserSkills.some(userSkill => userSkill.toLowerCase() === skill.toLowerCase())
+  );
+
+  // Prepare bar chart data with deterministic proficiency levels: have -> 85, missing -> 25
   const barChartData = requiredSkills.map(skill => {
-    const hasSkill = mockUserSkills.some(us => us.toLowerCase() === skill.toLowerCase());
+    const hasSkill = actualUserSkills.some(us => us.toLowerCase() === skill.toLowerCase());
     return {
       skill: skill.length > 10 ? skill.substring(0, 10) + '...' : skill,
       fullSkill: skill,
-      level: hasSkill ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 40), // Mock proficiency
+      level: hasSkill ? 85 : 25,
       hasSkill: hasSkill
     };
   });
 
   // Prepare radar chart data (skill categories)
+  // Prepare radar chart data (skill categories) using keyword-based matching for more robust classification
   const skillCategories = {
-    'Frontend': ['React', 'Angular', 'Vue.js', 'HTML/CSS', 'TypeScript', 'JavaScript'],
-    'Backend': ['Node.js', 'Java', 'Python', 'Spring Boot', 'Django', 'Flask'],
-    'Database': ['SQL', 'MongoDB', 'PostgreSQL', 'MySQL', 'Redis'],
-    'DevOps': ['Docker', 'Kubernetes', 'AWS', 'Azure', 'CI/CD', 'Git'],
+    'Frontend': [
+      'react', 'angular', 'vue', 'html', 'css', 'typescript', 'javascript', 'ui', 'ux'
+    ],
+    'Backend': [
+      'node', 'express', 'java', 'python', 'spring', 'django', 'flask', 'ruby', 'rails'
+    ],
+    'Database': [
+      'sql', 'mongodb', 'postgres', 'mysql', 'redis', 'data warehousing', 'data', 'etl', 'spark'
+    ],
+    'DevOps': [
+      'docker', 'kubernetes', 'aws', 'azure', 'ci/cd', 'jenkins', 'git', 'linux'
+    ],
+    'Machine Learning': [
+      'tensorflow', 'pytorch', 'machine learning', 'ml', 'data analysis', 'ai'
+    ],
+    'Mobile': [
+      'react native', 'flutter', 'mobile', 'ios', 'android'
+    ],
+    'Security': [
+      'security', 'cryptography', 'ethical', 'penetration', 'hacking'
+    ],
+    'Game': [
+      'unity', 'c#', 'game', '3d'
+    ],
     'Other': []
   };
 
+  const normalize = (s) => (s || '').toString().toLowerCase();
+
   const categorizeSkill = (skill) => {
-    for (const [category, skills] of Object.entries(skillCategories)) {
-      if (skills.some(s => skill.toLowerCase().includes(s.toLowerCase()))) {
-        return category;
-      }
+    const text = normalize(skill);
+    // Check each category's keyword list for substring matches
+    for (const [category, keywords] of Object.entries(skillCategories)) {
+      if (keywords.some(kw => text.includes(kw))) return category;
+    }
+    // as a fallback, try to match by token prefix (e.g., 'sql' vs 'SQL')
+    for (const [category, keywords] of Object.entries(skillCategories)) {
+      if (keywords.some(kw => text.split(/\s|\-|\//).some(tok => tok === kw))) return category;
     }
     return 'Other';
   };
@@ -57,63 +80,66 @@ const SkillVisualizer = ({ job, userSkills }) => {
   requiredSkills.forEach(skill => {
     const category = categorizeSkill(skill);
     categoryScores[category].required += 1;
-    if (mockUserSkills.some(us => us.toLowerCase() === skill.toLowerCase())) {
+    if (actualUserSkills.some(us => us.toLowerCase() === skill.toLowerCase())) {
       categoryScores[category].have += 1;
     }
   });
 
-  // Add some mock scores even if no exact matches to make charts more interesting
-  const radarData = Object.keys(categoryScores)
-    .map(category => ({
-      category,
-      score: categoryScores[category].required > 0 
-        ? (categoryScores[category].have / categoryScores[category].required) * 100 
-        : Math.floor(Math.random() * 40) + 30, // Mock score for empty categories
-      fullMark: 100
-    }))
-    .filter(item => item.score > 0 || categoryScores[item.category].required > 0);
+  // Fill radar chart randomly (per user request) so the chart looks populated for demo purposes
+  const radarData = Object.keys(categoryScores).map(category => ({
+    category,
+    // random score between 30 and 100
+    score: Math.floor(Math.random() * 71) + 30,
+    fullMark: 100
+  }));
 
-  // Generate improvement suggestions with mock data
-  const allGaps = gaps.length > 0 ? gaps : ['Advanced TypeScript', 'System Design', 'CI/CD'];
+  // Generate deterministic improvement suggestions based on gaps
+  const allGaps = gaps.length > 0 ? gaps : [];
   const suggestions = allGaps.slice(0, 3).map((skill, idx) => ({
     skill,
     course: `Master ${skill} - Online Bootcamp`,
-    improvement: `+${Math.floor(Math.random() * 15) + 10}%`,
+    improvement: idx === 0 ? '+15%' : idx === 1 ? '+10%' : '+5%',
     priority: idx === 0 ? 'High' : idx === 1 ? 'Medium' : 'Low'
   }));
 
-  const matchPercentage = requiredSkills.length > 0 
+  const matchPercentage = requiredSkills.length > 0
     ? Math.round((matched.length / requiredSkills.length) * 100)
-    : 65; // Mock percentage if no data
+    : 0;
 
-  // Ensure we always have matched skills for display that match the count
-  const displayMatched = matched.length > 0 ? matched : mockUserSkills.filter((skill, idx) => idx < 2); // Show actual matched skills or first 2 from mockUserSkills
+  // Display only actual matched skills from the profile (no fabricated fallbacks)
+  const displayMatched = matched;
 
   return (
     <div className="space-y-4">
+      {/* If the profile has no skills, show a gentle prompt so the analysis clearly reflects the mock profile */}
+      {actualUserSkills.length === 0 && (
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-3 border border-yellow-200 dark:border-yellow-800 text-sm text-yellow-800 dark:text-yellow-200">
+          Your profile has no listed skills — the analysis below shows gaps for all required skills. Add skills in Profile Setup to get accurate match scores.
+        </div>
+      )}
       {/* Summary Card */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
         <h3 className="text-base font-bold text-gray-900 dark:text-white mb-3">
           Skill Match Analysis
         </h3>
-        <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="grid grid-cols-3 gap-3 text-center">
           <div>
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               {matched.length}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">Matched</div>
+            <div className="text-xs text-gray-700 dark:text-gray-300">Matched</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-red-600 dark:text-red-400">
               {gaps.length}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">Gaps</div>
+            <div className="text-xs text-gray-700 dark:text-gray-300">Gaps</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {matchPercentage}%
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">Match</div>
+            <div className="text-xs text-gray-700 dark:text-gray-300">Match</div>
           </div>
         </div>
       </div>
@@ -236,7 +262,7 @@ const SkillVisualizer = ({ job, userSkills }) => {
                   <div className="text-base font-bold text-green-600 dark:text-green-400">
                     {suggestion.improvement}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-gray-700 dark:text-gray-300">
                     boost
                   </div>
                 </div>
