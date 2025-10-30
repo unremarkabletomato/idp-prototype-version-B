@@ -132,9 +132,10 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl overflow-y-auto h-[100svh] md:h-auto md:max-h-[90vh] pb-[env(safe-area-inset-bottom)]"
+              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl h-[100svh] md:h-auto md:max-h-[90vh] flex flex-col"
             >
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              {/* Header */}
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white">Review & Submit</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300">Resume & application for {job.role} @ {job.company}</p>
@@ -142,7 +143,8 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
                 <button onClick={onClose} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"><FiX /></button>
               </div>
 
-              <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Scrollable content area with bottom padding for navbar */}
+              <div className="flex-1 overflow-y-auto p-4 pb-32 md:pb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <button
@@ -160,7 +162,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
                   </div>
 
                   {activeTab === 'resume' && (
-                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg h-[50vh] md:h-[60vh] overflow-y-auto text-base">
+                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-y-auto text-base">
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Resume Preview</h3>
@@ -206,7 +208,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
                   )}
 
                   {activeTab === 'application' && (
-                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg h-[50vh] md:h-[60vh] overflow-y-auto text-base">
+                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-y-auto text-base">
                       <div className="mb-3 p-3 bg-white dark:bg-gray-800 rounded border flex items-center gap-3">
                         { (job.logo || job.companyLogo) && !logoError ? (
                           <img
@@ -255,7 +257,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
                 </div>
 
                 <div>
-                  <div className="p-4 rounded-t-lg md:rounded-lg bg-white dark:bg-gray-800 h-[32vh] md:h-[60vh] overflow-y-auto border">
+                  <div className="p-4 rounded-t-lg md:rounded-lg bg-white dark:bg-gray-800 overflow-y-auto border">
                     <h4 className="font-semibold mb-2">Job Summary</h4>
                     <div className="text-sm text-gray-700 dark:text-gray-300 mb-3">
                       <div className="font-medium">{job.role} • {job.company}</div>
@@ -274,11 +276,14 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
                       <p className="text-xs text-gray-600">Tip: edit your cover letter or contact info above before confirming.</p>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  <div className="mt-4 flex flex-col md:flex-row justify-end gap-3 p-4">
-                    <button onClick={onClose} className="w-full md:w-auto px-4 py-3 rounded bg-gray-800 text-white dark:bg-gray-700">Cancel</button>
-                    <button onClick={handleConfirm} disabled={submitting} className="w-full md:w-auto px-4 py-3 rounded bg-blue-600 text-white">{submitting ? 'Submitting...' : 'Confirm & Submit'}</button>
-                  </div>
+              {/* Fixed footer with action buttons - stays visible at bottom */}
+              <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-4">
+                <div className="flex flex-col md:flex-row justify-end gap-3">
+                  <button onClick={onClose} className="w-full md:w-auto px-4 py-3 rounded bg-gray-800 text-white dark:bg-gray-700">Cancel</button>
+                  <button onClick={handleConfirm} disabled={submitting} className="w-full md:w-auto px-4 py-3 rounded bg-blue-600 text-white">{submitting ? 'Submitting...' : 'Confirm & Submit'}</button>
                 </div>
               </div>
             </div>
