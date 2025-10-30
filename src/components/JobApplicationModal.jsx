@@ -132,7 +132,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl h-[100svh] md:h-auto md:max-h-[90vh] flex flex-col"
+              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl h-[90vh] md:h-auto md:max-h-[90vh] flex flex-col"
             >
               {/* Header */}
               <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between shrink-0">
@@ -144,7 +144,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
               </div>
 
               {/* Scrollable content area with bottom padding for navbar */}
-              <div className="flex-1 overflow-y-auto p-4 pb-32 md:pb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex-1 overflow-y-auto p-4 pb-4 md:pb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <button
