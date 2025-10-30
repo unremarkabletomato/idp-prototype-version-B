@@ -26,23 +26,30 @@ const MatchCard = ({
   const rotate = useTransform(x, [-200, 200], [-25, 25]);
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
 
+  // Dead zone in px: card will not move visually for drags within this range
+  const DEAD_ZONE = 10;
+
+  // Custom drag handler to enforce dead zone
+  const handleDrag = (event, info) => {
+    // Only allow card to move if drag exceeds dead zone
+    if (Math.abs(info.point.x - info.origin.x) < DEAD_ZONE) {
+      x.set(0);
+    } else {
+      x.set(info.point.x - info.origin.x);
+    }
+  };
+
   const handleDragEnd = (event, info) => {
-    // The absolute horizontal offset from the drag gesture
     const draggedX = info.offset.x;
     const absDraggedX = Math.abs(draggedX);
 
     // If the drag distance does NOT exceed the threshold, smoothly reset the card
-    // to the center. This prevents tiny, accidental drags from being treated as
-    // swipes. We use Framer Motion's `animate` helper to produce a natural spring.
     if (absDraggedX < swipeThreshold) {
-      // animate the motion value `x` back to 0 (center)
       animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
-      // also ensure opacity is restored (in case transform affected it)
       return;
     }
 
     // At this point the drag was large enough to be considered a swipe.
-    // Right swipe: request apply, but keep the card in place (existing behavior).
     if (draggedX > 0) {
       if (typeof onRequestApply === 'function') {
         onRequestApply(job);
@@ -50,7 +57,6 @@ const MatchCard = ({
       return;
     }
 
-    // Left swipe: animate the card off-screen to the left and call onSwipeLeft.
     setExitX(-300);
     setTimeout(() => {
       onSwipeLeft(job);
@@ -77,6 +83,7 @@ const MatchCard = ({
       style={{ x, rotate, opacity }}
       drag={showControls ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
+      onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       animate={exitX !== 0 ? { x: exitX, opacity: 0 } : {}}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
