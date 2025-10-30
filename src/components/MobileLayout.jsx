@@ -6,6 +6,7 @@ import { mockJobs } from '../data/mockJobs';
 
 // Simple notifications bell + popup shown in the header.
 const BellButton = () => {
+  
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const ref = useRef(null);
