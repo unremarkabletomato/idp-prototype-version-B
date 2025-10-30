@@ -130,7 +130,7 @@ const ResumeModal = ({ isOpen, onClose, profile, job }) => {
                         <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.location}</span>
                       </div>
                     </div>
-                    <div className="flex justify-center gap-4 text-sm text-blue-600 dark:text-blue-400 mt-3">
+                    <div className="flex flex-col items-center gap-2 text-sm text-blue-600 dark:text-blue-400 mt-3">
                       <div className="flex items-center space-x-1">
                         <FiGithub size={16} />
                         <span className="text-gray-700 dark:text-gray-300">{resume.personalInfo.github}</span>
