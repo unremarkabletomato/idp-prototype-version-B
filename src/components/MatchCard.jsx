@@ -20,22 +20,19 @@ const MatchCard = ({
   // If not provided, DEFAULT_SWIPE_THRESHOLD will be used.
   swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
 }) => {
-  const [exitX, setExitX] = useState(0);
   const [showSkillGap, setShowSkillGap] = useState(false);
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-25, 25]);
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
 
-  // Dead zone in px: card will not move visually for drags within this range
+  // Tiny dead zone: ignore tiny movements visually while dragging
   const DEAD_ZONE = 10;
 
-  // Custom drag handler to enforce dead zone
-  const handleDrag = (event, info) => {
-    // Only allow card to move if drag exceeds dead zone
-    if (Math.abs(info.point.x - info.origin.x) < DEAD_ZONE) {
+  const handleDrag = () => {
+    const current = x.get();
+    if (Math.abs(current) < DEAD_ZONE) {
+      // Keep card visually centered for tiny movements
       x.set(0);
-    } else {
-      x.set(info.point.x - info.origin.x);
     }
   };
 
@@ -43,7 +40,13 @@ const MatchCard = ({
     const draggedX = info.offset.x;
     const absDraggedX = Math.abs(draggedX);
 
-    // If the drag distance does NOT exceed the threshold, smoothly reset the card
+    // If the drag distance is within the dead zone OR below swipe threshold, snap back and do nothing
+    if (absDraggedX < DEAD_ZONE) {
+      animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
+      return;
+    }
+
+    // If the drag distance does NOT exceed the swipe threshold, smoothly reset the card
     if (absDraggedX < swipeThreshold) {
       animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
       return;
@@ -54,10 +57,13 @@ const MatchCard = ({
       if (typeof onRequestApply === 'function') {
         onRequestApply(job);
       }
+      // Re-center the card after triggering apply
+      animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
       return;
     }
 
-    setExitX(-300);
+    // Animate left off-screen and then notify parent
+    animate(x, -350, { type: 'spring', stiffness: 300, damping: 28 });
     setTimeout(() => {
       onSwipeLeft(job);
     }, 200);
@@ -85,7 +91,6 @@ const MatchCard = ({
       dragConstraints={{ left: 0, right: 0 }}
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
-      animate={exitX !== 0 ? { x: exitX, opacity: 0 } : {}}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden max-w-md mx-auto h-full flex flex-col border border-gray-200 dark:border-gray-700">

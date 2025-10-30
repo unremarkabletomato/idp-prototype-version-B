@@ -80,13 +80,6 @@ const Applications = () => {
     }
   });
 
-  const statusCounts = {
-    'All': appliedJobs.length,
-    'Applied': appliedJobs.filter(j => j.status === 'Applied').length,
-    'Pending': appliedJobs.filter(j => j.status === 'Pending').length,
-    'Matched': appliedJobs.filter(j => j.status === 'Matched').length,
-    'Rejected': appliedJobs.filter(j => j.status === 'Rejected').length
-  };
 
   const handleViewResume = (job) => {
     setSelectedJob(job);
@@ -126,26 +119,6 @@ const Applications = () => {
             >
               Find More Jobs
             </button>
-          </div>
-
-          {/* Filter Tabs */}
-          <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 no-scrollbar">
-            {Object.keys(statusCounts).map((status) => (
-              <button
-                key={status}
-                onClick={() => setFilterStatus(status)}
-                className={`flex-shrink-0 px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
-                  filterStatus === status
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
-                }`}
-              >
-                {status}
-                <span className="ml-2 px-2 py-0.5 rounded-full bg-white/20 text-xs">
-                  {statusCounts[status]}
-                </span>
-              </button>
-            ))}
           </div>
         </motion.div>
 
