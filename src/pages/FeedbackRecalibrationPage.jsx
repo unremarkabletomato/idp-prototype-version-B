@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useStore } from '@/store/useStore';
 import { skillOptions, interestOptions, quizQuestions } from '@/data/mockProfile';
 import MobileLayout from '@/components/MobileLayout';
-import { FiRefreshCw, FiEdit, FiCheck, FiArrowRight, FiTrendingUp, FiChevronUp, FiChevronDown, FiEdit3 } from 'react-icons/fi';
+import { FiRefreshCw, FiEdit, FiCheck, FiArrowRight, FiTrendingUp, FiChevronUp, FiChevronDown, FiEdit3, FiArrowLeft } from 'react-icons/fi';
 
 const FeedbackRecalibration = () => {
   const router = useRouter();
@@ -125,9 +125,20 @@ const FeedbackRecalibration = () => {
     <MobileLayout>
       <div className="p-4">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Profile</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">View and update your profile details</p>
+          <div className="flex items-center gap-3">
+            {/* Back to main swipe page */}
+            <button
+              type="button"
+              aria-label="Back to matches"
+              onClick={() => router.push('/match-dashboard')}
+              className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+            >
+              <FiArrowLeft size={18} />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Profile</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">View and update your profile details</p>
+            </div>
           </div>
         </motion.div>
 

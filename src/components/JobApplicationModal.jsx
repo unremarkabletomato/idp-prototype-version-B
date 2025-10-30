@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
 
 const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfirm }) => {
-  const [activeTab, setActiveTab] = useState('resume');
+  // Show the application form first by default
+  const [activeTab, setActiveTab] = useState('application');
   const [form, setForm] = useState({
     name: profile.name || '',
     email: profile.email || '',
@@ -18,7 +19,8 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
 
   useEffect(() => {
     if (isOpen) {
-      setActiveTab('resume');
+      // On open, default to application form first
+      setActiveTab('application');
       setForm({
         name: profile.name || '',
         email: profile.email || '',
@@ -130,7 +132,7 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden h-[82vh] md:h-auto"
+              className="w-full max-w-[480px] mx-auto bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl overflow-y-auto h-[100svh] md:h-auto md:max-h-[90vh] pb-[env(safe-area-inset-bottom)]"
             >
               <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div>
