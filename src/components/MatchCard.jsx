@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { FiX, FiCheck, FiTrendingUp, FiMapPin, FiClock, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 import SkillVisualizer from '@/components/SkillVisualizer';
+
+const DEFAULT_SWIPE_THRESHOLD = 100; // px
 
 const MatchCard = ({
   job,
@@ -14,6 +16,9 @@ const MatchCard = ({
   totalJobs = 0,
   onNavigateApplications,
   onNavigateRecalibrate,
+  // Allow parent to override how far a user must drag to register a swipe.
+  // If not provided, DEFAULT_SWIPE_THRESHOLD will be used.
+  swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
 }) => {
   const [exitX, setExitX] = useState(0);
   const [showSkillGap, setShowSkillGap] = useState(false);
@@ -22,20 +27,34 @@ const MatchCard = ({
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
 
   const handleDragEnd = (event, info) => {
-    if (Math.abs(info.offset.x) > 100) {
-      // If user dragged right: request apply (show modal) but don't auto-remove the card here.
-      if (info.offset.x > 0) {
-        if (typeof onRequestApply === 'function') {
-          onRequestApply(job);
-        }
-      } else {
-        // left: keep previous behavior and animate away
-        setExitX(-300);
-        setTimeout(() => {
-          onSwipeLeft(job);
-        }, 200);
-      }
+    // The absolute horizontal offset from the drag gesture
+    const draggedX = info.offset.x;
+    const absDraggedX = Math.abs(draggedX);
+
+    // If the drag distance does NOT exceed the threshold, smoothly reset the card
+    // to the center. This prevents tiny, accidental drags from being treated as
+    // swipes. We use Framer Motion's `animate` helper to produce a natural spring.
+    if (absDraggedX < swipeThreshold) {
+      // animate the motion value `x` back to 0 (center)
+      animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
+      // also ensure opacity is restored (in case transform affected it)
+      return;
     }
+
+    // At this point the drag was large enough to be considered a swipe.
+    // Right swipe: request apply, but keep the card in place (existing behavior).
+    if (draggedX > 0) {
+      if (typeof onRequestApply === 'function') {
+        onRequestApply(job);
+      }
+      return;
+    }
+
+    // Left swipe: animate the card off-screen to the left and call onSwipeLeft.
+    setExitX(-300);
+    setTimeout(() => {
+      onSwipeLeft(job);
+    }, 200);
   };
 
   const getMatchColor = (score) => {
