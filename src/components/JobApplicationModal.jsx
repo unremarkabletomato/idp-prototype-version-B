@@ -280,10 +280,10 @@ const JobApplicationModal = ({ isOpen, onClose, profile = {}, job = {}, onConfir
               </div>
 
               {/* Fixed footer with action buttons - stays visible at bottom */}
-              <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-4">
-                <div className="flex flex-col md:flex-row justify-end gap-3">
-                  <button onClick={onClose} className="w-full md:w-auto px-4 py-3 rounded bg-gray-800 text-white dark:bg-gray-700">Cancel</button>
-                  <button onClick={handleConfirm} disabled={submitting} className="w-full md:w-auto px-4 py-3 rounded bg-blue-600 text-white">{submitting ? 'Submitting...' : 'Confirm & Submit'}</button>
+              <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 pb-16">
+                <div className="flex flex-row justify-between gap-3">
+                  <button onClick={onClose} className="px-6 py-3 rounded bg-gray-800 text-white dark:bg-gray-700">Cancel</button>
+                  <button onClick={handleConfirm} disabled={submitting} className="px-6 py-3 rounded bg-blue-600 text-white">{submitting ? 'Submitting...' : 'Confirm & Submit'}</button>
                 </div>
               </div>
             </div>
