@@ -226,7 +226,7 @@ const MatchDashboard = () => {
   const showBackButton = (skippedJobs && skippedJobs.length > 0);
 
   return (
-    <MobileLayout showBack={showBackButton} title="Job Matches" onBack={handleBackToPreviousSkipped}>
+    <MobileLayout showBack={showBackButton} title="Job Matches" onBack={handleBackToPreviousSkipped} >
       <div className="px-4 py-4">
         {/* Main Content - Only the Card visible */}
         <div className="h-[calc(100dvh-100px)] relative">

@@ -20,7 +20,6 @@ const MatchCard = ({
   // If not provided, DEFAULT_SWIPE_THRESHOLD will be used.
   swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
 }) => {
-  const [showSkillGap, setShowSkillGap] = useState(false);
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-25, 25]);
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
@@ -172,27 +171,10 @@ const MatchCard = ({
             </div>
           </div>
 
-          {/* Embedded Controls previously outside the card */}
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={() => setShowSkillGap(!showSkillGap)}
-              className={`w-full px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2 ${
-                showSkillGap
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
-              }`}
-            >
-              <FiBarChart2 />
-              <span>{showSkillGap ? 'Hide' : 'Show'} Skill Analysis</span>
-            </button>
-
-            {/* Recalibrate button removed from card (use bottom nav Profile to recalibrate) */}
-          </div>
-
-          {/* Skill Gap Visualizer (inside the card) */}
-          {showSkillGap && (
+          {/* Skill Analysis - Always visible inside the card */}
+          <div>
             <SkillVisualizer job={job} userSkills={profileSkills} />
-          )}
+          </div>
 
           {/* Quick Tips */}
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
