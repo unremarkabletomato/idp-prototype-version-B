@@ -168,7 +168,7 @@ const MobileLayout = ({ children, showBack = false, title = '', onBack = null })
           <div className="fixed bottom-0 left-0 right-0 z-50">
             {/* center and constrain to the same max width as .mobile-container */}
             <div className="mx-auto w-full max-w-[480px]">
-              <div className="flex bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-t-md overflow-hidden">
+              <div className="flex bg-blue-400 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-t-md overflow-hidden">
                 <button
                   aria-label="Filter"
                   className="w-1/3 py-3 flex flex-col items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-200"
